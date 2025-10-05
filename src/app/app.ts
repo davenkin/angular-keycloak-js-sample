@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {KeycloakService} from './keycloak.service';
 
 @Component({
   selector: 'app-root',
@@ -6,4 +7,6 @@ import {Component} from '@angular/core';
   styleUrl: './app.scss'
 })
 export class App {
+  constructor(protected keycloakService: KeycloakService) {
+  }
 }
