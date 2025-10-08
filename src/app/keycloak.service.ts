@@ -24,4 +24,10 @@ export class KeycloakService {
 
     return this.keycloak.init({onLoad: 'login-required'});
   }
+
+  requireLogin() {
+    if (!this.keycloak.authenticated || this.keycloak.isTokenExpired()) {
+      this.keycloak.login();
+    }
+  }
 }
