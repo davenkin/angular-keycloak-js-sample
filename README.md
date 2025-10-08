@@ -19,3 +19,11 @@ This application requires the user to be logged in for all its pages, this actua
     - `Web origins` set to `*` to allow all domains for CORS requests, only for testing purpose
   - In `test-realm`, create a user `test-user`
 - Run `npm start`, then open your browser and navigate to [http://localhost:4200/](http://localhost:4200/).
+
+
+## How it works
+- It is assumed that the whole application requires the user to be authenticated by configuring `{onLoad: 'login-required'}` for `Keycloak.init()`.
+- The Keycloak initialization and configuration is done via Angular's `provideAppInitializer()`.
+- The `provideAppInitializer()` calls `KeycloakService.init()` which in turn calls `Keycloak.init({onLoad: 'login-required'})`, this will login the user even before the UI renders.
+- `KeycloakService.init()` also listens  Keycloak's `onTokenExpired` event, and tries to refresh the token by calling updateToken() once the previous token expires.
+- If the `updateToken()` responses with error, such as the refresh token itself expires which will results an http status of 400, Keycloak.js internally will call clearToken() which shows the login page.

@@ -15,7 +15,8 @@ export class KeycloakService {
 
   init() {
     // refresh the access token upon previous token expired
-    // no need to do this for Keycloak.onAuthRefreshError and Keycloak.onAuthLogout as they will facilitate Keycloak.login() automatically once `session status iframe` is enabled.
+    // if the refresh operation response error(such as refresh token expired which results in 400 error), it calls Keycloak.clearToken() internally
+    // Keycloak.clearToken() will call onAuthLogout, and if configured as `login-required`, it will do login() which shows the login page
     this.keycloak.onTokenExpired = () => {
       this.keycloak.updateToken();
     };
