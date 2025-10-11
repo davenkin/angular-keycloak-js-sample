@@ -27,3 +27,4 @@ This application requires the user to be logged in for all its pages, this actua
 - The `provideAppInitializer()` calls `KeycloakService.init()` which in turn calls `Keycloak.init({onLoad: 'login-required'})`, this will login the user even before the UI renders.
 - `KeycloakService.init()` also listens  Keycloak's `onTokenExpired` event, and tries to refresh the token by calling updateToken() once the previous token expires.
 - If the `updateToken()` responses with error, such as the refresh token itself expires which will results an http status of 400, Keycloak.js internally will call clearToken() which shows the login page.
+- By default, a check login iframe is added by keycloak.js, it will periodically check if the user is already logged out, if so it tries to login the user again by displaying the login page.
