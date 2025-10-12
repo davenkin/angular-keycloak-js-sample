@@ -23,8 +23,8 @@ This application requires the user to be logged in for all its pages, this actua
 
 ## How it works
 - It is assumed that the whole application requires the user to be authenticated by configuring `{onLoad: 'login-required'}` for `Keycloak.init()`.
-- The Keycloak initialization and configuration is done via Angular's `provideAppInitializer()`.
-- The `provideAppInitializer()` calls `KeycloakService.init()` which in turn calls `Keycloak.init({onLoad: 'login-required'})`, this will login the user even before the UI renders.
-- `KeycloakService.init()` also listens  Keycloak's `onTokenExpired` event, and tries to refresh the token by calling updateToken() once the previous token expires.
-- If the `updateToken()` responses with error, such as the refresh token itself expires which will results an http status of 400, Keycloak.js internally will call clearToken() which shows the login page.
-- By default, a check login iframe is added by keycloak.js, it will periodically check if the user is already logged out, if so it tries to login the user again by displaying the login page.
+- The Keycloak initialization is done via `provideKeycloak()`, this will log the user in even before the UI renders.
+- When calling backend APIs, access token is added as `Bearer` token except configured explicitly as excluded in `BEARER_TOKEN_EXCLUDED_URLS` by yourself.
+- Every access token attached API request will call `Keycloak.updateToken()` to automatically refresh the token if needed, refer to `includeBearerTokenInterceptor()` for more detail. If the refresh fails, login page is displayed.
+- If API responses with 401 error which means authentication failed, the `response401Interceptor()` will display the login page asking the user to login.
+- By default, a check login iframe is added by `keycloak-js`, it will periodically check if the user is already logged out, if so it tries to login the user again by displaying the login page.
