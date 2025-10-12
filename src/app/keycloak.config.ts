@@ -17,8 +17,7 @@ export function provideKeycloak(): EnvironmentProviders {
     },
     provideAppInitializer(async () => {
       try {
-        const keycloak = inject(Keycloak);
-        return await keycloak.init({onLoad: 'login-required'});
+        return await inject(Keycloak).init({onLoad: 'login-required'});
       } catch (error) {
         console.error('Error while initialize keycloak.', error);
         throw error;
@@ -54,18 +53,22 @@ export function includeBearerTokenInterceptor(req: HttpRequest<unknown>, next: H
   return from((async () => {
     return await keycloak.updateToken().catch(() => false);
   })()).pipe(mergeMap(() => {
-    return next(req.clone({
-      setHeaders: {
-        'Authorization': `Bearer ${keycloak.token}`
-      }
-    }));
+    if (keycloak.token) {
+      return next(req.clone({
+        setHeaders: {
+          'Authorization': `Bearer ${keycloak.token}`
+        }
+      }));
+    }
+    return next(req);
   }))
 }
 
-export function loginOn401Interceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+export function response401Interceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+  let keycloak = inject(Keycloak);
   return next(req).pipe(catchError((error: HttpErrorResponse) => {
     if (error.status === 401) {
-      inject(Keycloak).login();
+      keycloak.login();
     }
     return throwError(() => error);
   }));
