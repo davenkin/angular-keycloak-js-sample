@@ -1,24 +1,12 @@
-import {
-  ApplicationConfig,
-  inject,
-  provideAppInitializer,
-  provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection
-} from '@angular/core';
-import {KeycloakService} from './keycloak.service';
+import {ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection} from '@angular/core';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
+import {includeBearerTokenInterceptor, provideKeycloak} from './keycloak.config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({eventCoalescing: true}),
-    provideAppInitializer(async () => {
-      try {
-        const keycloakService = inject(KeycloakService);
-        return await keycloakService.init();
-      } catch (error) {
-        console.error('Error while initialize keycloak.', error);
-        throw error;
-      }
-    }),
+    provideKeycloak(),
+    provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
   ]
 };
