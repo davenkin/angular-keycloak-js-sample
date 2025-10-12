@@ -17,7 +17,7 @@ This application requires the user to be logged in for all its pages, this actua
     - `Authentication flow` set to `Standard flow` to enable the Oauth2 authorization flow 
     - `Valid redirect URIs` set to `http://localhost:4200/*`, which points our the local Angular application
     - `Web origins` set to `*` to allow all domains for CORS requests, only for testing purpose
-  - In `test-realm`, create a user `test-user`
+  - In `test-realm`, create a user `test-user` and set credentials for this user for login
 - Run `npm start`, then open your browser and navigate to [http://localhost:4200/](http://localhost:4200/).
 
 

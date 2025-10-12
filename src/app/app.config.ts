@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
         const keycloakService = inject(KeycloakService);
         return await keycloakService.init();
       } catch (error) {
-        console.error('Error while authenticate with keycloak.', error);
+        console.error('Error while initialize keycloak.', error);
         throw error;
       }
     }),
