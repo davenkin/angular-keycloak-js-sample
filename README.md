@@ -10,8 +10,8 @@ This application requires the user to be logged in for all its pages, this actua
 
 ## Local run
 - First start Keycloak server: `./start-local-keyloak.sh`, this starts the Keycloak server at [http://localhost:8080](http://localhost:8080) with an admin user named `admin` and password `admin`. 
-- In Keycloak UI, navigate to realm `test-realm`, create a user `test-user` and set the password
-- Run `npm start`, then open your browser and navigate to [http://localhost:4200/](http://localhost:4200/).
+- In Keycloak UI, navigate to realm `test-realm`, create a user and set the password
+- Run `npm start`, then open your browser and navigate to [http://localhost:4200/](http://localhost:4200/) and login with the previously created user
 
 
 ## Local Keycloak Server
