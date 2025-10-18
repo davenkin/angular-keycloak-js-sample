@@ -3,7 +3,7 @@ import {catchError, from, mergeMap, Observable, throwError} from 'rxjs';
 import {EnvironmentProviders, inject, makeEnvironmentProviders, provideAppInitializer} from '@angular/core';
 import Keycloak from 'keycloak-js';
 
-const BEARER_TOKEN_EXCLUDED_URLS: UrlCondition[] = [];
+const AUTH_EXCLUDED_URLS: UrlCondition[] = [];
 
 export function provideKeycloak(): EnvironmentProviders {
   return makeEnvironmentProviders([
@@ -45,7 +45,7 @@ function canMatch(req: HttpRequest<unknown>, condition: UrlCondition) {
 }
 
 export function includeBearerTokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-  let shouldExclude = BEARER_TOKEN_EXCLUDED_URLS.some(it => canMatch(req, it));
+  let shouldExclude = AUTH_EXCLUDED_URLS.some(it => canMatch(req, it));
   if (shouldExclude) {
     return next(req);
   }
@@ -66,7 +66,7 @@ export function includeBearerTokenInterceptor(req: HttpRequest<unknown>, next: H
   }))
 }
 
-export function response401Interceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+export function apiResponseErrorInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   let keycloak = inject(Keycloak);
   return next(req).pipe(catchError((error: HttpErrorResponse) => {
     if (error.status === 401) {
