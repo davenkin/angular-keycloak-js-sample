@@ -28,5 +28,5 @@ The local Keycloak server by default has the following set up:
 - The Keycloak initialization is done via `provideKeycloak()`, this will log the user in even before the UI renders.
 - When calling backend APIs, access token is added as `Bearer` token except configured explicitly as excluded in `BEARER_TOKEN_EXCLUDED_URLS` by yourself.
 - Every access token attached API request will call `Keycloak.updateToken()` to automatically refresh the token if needed, refer to `includeBearerTokenInterceptor()` for more detail. If the refresh fails, login page is displayed.
-- If API responses with 401 error which means authentication failed, the `response401Interceptor()` will display the login page asking the user to login.
+- If API responses with 401 error which means authentication failed, the `apiResponseErrorInterceptor()` will display the login page asking the user to login.
 - By default, a check login iframe is added by `keycloak-js`, it will periodically check if the user is already logged out, if so it tries to login the user again by displaying the login page.
