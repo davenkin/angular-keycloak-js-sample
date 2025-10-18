@@ -28,14 +28,16 @@ export function provideKeycloak(): EnvironmentProviders {
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'HEAD' | 'PATCH';
 
+// either urlPattern or urlIncluded matches
 interface UrlCondition {
-  urlPattern: RegExp;
+  urlPattern?: RegExp;
+  urlIncluded?: string;
   httpMethods?: HttpMethod[]
 }
 
 function canMatch(req: HttpRequest<unknown>, condition: UrlCondition) {
-  let patternMatched = condition.urlPattern.test(req.url);
-  if (!patternMatched) {
+  let urlMatched = condition.urlPattern?.test(req.url) || (condition.urlIncluded ? req.url.includes(condition.urlIncluded) : false);
+  if (!urlMatched) {
     return false;
   }
 
